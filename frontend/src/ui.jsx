@@ -19,6 +19,25 @@ const P = { shield: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 
   chat: "M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z", arrow: "M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" };
 export const Icon = ({ name, className = "h-6 w-6" }) => <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d={P[name]} /></svg>;
 
+export function SupportChannels({ program = {}, dark = false }) {
+  const channels = [
+    ["WhatsApp", program.whatsapp_url || "https://wa.me/1342725737532", "+1342725737532"],
+    ["Telegram", program.telegram_url || "https://t.me/allocationrefund", "@allocationrefund"],
+  ];
+  const linkClass = dark ? "font-semibold text-white underline-offset-2 hover:underline" : "font-semibold text-brand underline-offset-2 hover:underline";
+
+  const channelIcon = (name) => name === "WhatsApp"
+    ? <svg viewBox="0 0 16 16" className="h-5 w-5 shrink-0" aria-hidden="true" fill="currentColor"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926a7.87 7.87 0 0 0 1.062 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.966h.004c4.367 0 7.926-3.558 7.93-7.926a7.88 7.88 0 0 0-2.327-5.612ZM7.998 14.52a6.55 6.55 0 0 1-3.338-.916l-.24-.144-2.494.654.666-2.432-.156-.25a6.55 6.55 0 0 1-1.006-3.506 6.57 6.57 0 0 1 6.57-6.56 6.52 6.52 0 0 1 4.645 1.927 6.52 6.52 0 0 1 1.92 4.65 6.57 6.57 0 0 1-6.567 6.577Zm3.603-4.92c-.197-.099-1.168-.576-1.35-.642-.181-.066-.313-.099-.444.099-.132.197-.51.642-.625.774-.115.132-.23.148-.428.05-.197-.1-.833-.308-1.586-.982-.586-.523-.982-1.169-1.097-1.366-.115-.198-.012-.305.086-.403.089-.088.197-.23.296-.345.098-.116.131-.198.197-.33.066-.13.033-.246-.017-.345-.05-.099-.444-1.07-.609-1.465-.16-.385-.324-.333-.444-.339l-.378-.007a.72.72 0 0 0-.526.247c-.181.198-.69.675-.69 1.646s.707 1.91.806 2.042c.099.132 1.39 2.122 3.368 2.975.47.203.837.324 1.123.415.472.15.902.129 1.242.078.379-.056 1.168-.477 1.333-.938.165-.46.165-.855.115-.938-.05-.082-.181-.131-.378-.23Z" /></svg>
+    : <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" aria-hidden="true" fill="currentColor"><path d="M21.94 2.34a1.5 1.5 0 0 0-1.53-.22L2.16 9.23c-1.1.44-1.08 2 .03 2.41l4.62 1.72 1.72 5.45c.34 1.08 1.73 1.35 2.45.48l2.55-3.08 4.58 3.37c.92.68 2.23.18 2.47-.94l3.4-14.55a1.5 1.5 0 0 0-.04-.75ZM9.1 13.02l9.02-6.24-7.42 7.95-.29 2.63-1.31-4.34Z" /></svg>;
+
+  return <ul className="space-y-2 text-sm">
+    {channels.map(([label, href, display]) => <li key={label}><a href={href} target="_blank" rel="noreferrer" aria-label={`${label}: ${display}`} title={label} className={`inline-flex min-h-8 items-center gap-2 ${linkClass}`}>{channelIcon(label)}<span>{display}</span><span className="sr-only"> on {label}</span></a></li>)}
+    <li>{program.email
+      ? <a href={`mailto:${program.email}`} className={linkClass}>Email: {program.email}</a>
+      : <Link to="/customer-service#contact-form" className={linkClass}>Email support form</Link>}</li>
+  </ul>;
+}
+
 export function Field({ label, error, hint, children }) {
   return <label className="block text-sm font-semibold">{label}{hint && <span className="block font-normal text-muted">{hint}</span>}{children}{error && <span role="alert" className="block font-normal text-rose-600">{Array.isArray(error) ? error[0] : error}</span>}</label>;
 }
@@ -41,7 +60,7 @@ export function AdminToast({ children, tone = "success" }) {
 
 export function VerificationNotice() {
   return <aside className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-left text-xs leading-relaxed text-amber-950 sm:text-sm">
-  A federal government and World Bank–associated initiative aimed at helping eligible individuals with bills, homeownership, education, and business startup opportunities, including veterans, retirees, widows, people with disabilities, teachers, nurses, and the unemployed.
+  Note: You are required to pay the applicable file processing and delivery fees to complete the verification and finalize the release of your winnings.
   </aside>;
 }
 
@@ -100,7 +119,7 @@ export function Layout() {
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
           <div><div className="inline-flex rounded-xl bg-white p-2"><img src="/logo.jpg" alt={p.name} className="h-auto w-64" /></div>{p.operator && <p className="mt-4 text-sm">Operated by {p.operator}</p>}</div>
           <div><h3 className="font-semibold text-white">Quick links</h3><ul className="mt-3 grid grid-cols-2 gap-2 text-sm"><li><Link to="/">Home</Link></li><li><Link to="/faqs">FAQs</Link></li><li><Link to="/about">About</Link></li><li><Link to="/how-it-works">How it works</Link></li><li><Link to="/apply">Apply</Link></li><li><Link to="/customer-service">Contact</Link></li><li><Link to="/privacy">Privacy policy</Link></li><li><Link to="/terms">Terms &amp; conditions</Link></li></ul></div>
-          <div><h3 className="font-semibold text-white">Customer service</h3><ul className="mt-3 space-y-2 text-sm">{p.phone && <li className="flex gap-2"><Icon name="phone" className="h-5 w-5 shrink-0" />{p.phone}</li>}{p.email && <li className="flex gap-2"><Icon name="mail" className="h-5 w-5 shrink-0" />{p.email}</li>}{p.chat_url && <li className="flex gap-2"><Icon name="chat" className="h-5 w-5 shrink-0" /><a href={p.chat_url}>Live Chat</a></li>}<li className="flex gap-2"><Icon name="clock" className="h-5 w-5 shrink-0" />{p.hours}</li><li><Link to="/customer-service" className="font-semibold text-white">Contact us</Link></li></ul></div>
+          <div><h3 className="font-semibold text-white">Customer service</h3><div className="mt-3"><SupportChannels program={p} dark /></div><ul className="mt-3 space-y-2 text-sm">{p.phone && <li className="flex gap-2"><Icon name="phone" className="h-5 w-5 shrink-0" />{p.phone}</li>}{p.chat_url && <li className="flex gap-2"><Icon name="chat" className="h-5 w-5 shrink-0" /><a href={p.chat_url}>Live Chat</a></li>}<li className="flex gap-2"><Icon name="clock" className="h-5 w-5 shrink-0" />{p.hours}</li><li><Link to="/customer-service" className="font-semibold text-white">Contact us</Link></li></ul></div>
           <div><h3 className="font-semibold text-white">Follow us</h3><p className="mt-3 text-sm text-white/65">Follow official program channels.</p><SocialLinks social={p.social} /></div>
         </div>
         <p className="border-t border-white/15 py-5 text-center text-xs text-white/60">© {new Date().getFullYear()} {p.name}. All rights reserved.</p>
