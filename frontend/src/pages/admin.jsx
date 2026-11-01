@@ -151,12 +151,15 @@ function AdminPager({ page, lastPage, total, onChange }) {
 }
 
 export function AdminReferrals() {
-  const [data, setData] = useState(null), [error, setError] = useState(null), [notice, setNotice] = useState(null), [busy, setBusy] = useState(false);
-  const load = () => api("/admin/referrals").then(setData).catch((e) => setError(e.message));
+  const [data, setData] = useState(null), [error, setError] = useState(null), [notice, setNotice] = useState(null), [busy, setBusy] = useState(false), [siteUrl, setSiteUrl] = useState("");
+  const load = () => {
+    api("/admin/referrals").then(setData).catch((e) => setError(e.message));
+    api("/program").then((program) => setSiteUrl(program.frontend_url || "")).catch(() => setSiteUrl(""));
+  };
   useEffect(() => { load(); }, []);
   const create = async () => { setBusy(true); setError(null); setNotice(null); try { await api("/admin/referrals", { method: "POST", body: {} }); setNotice("Referral link created."); await load(); } catch (e) { setError(e.message); } finally { setBusy(false); } };
   const toggle = async (item) => { setError(null); try { await api(`/admin/referrals/${item.id}`, { method: "PUT", body: { is_active: !item.is_active } }); await load(); } catch (e) { setError(e.message); } };
-  const copy = async (code) => { const link = `${window.location.origin}/apply?ref=${encodeURIComponent(code)}`; try { await navigator.clipboard.writeText(link); setNotice("Referral link copied."); } catch { setNotice(link); } };
+  const copy = async (code) => { const publicSiteUrl = import.meta.env.VITE_PUBLIC_SITE_URL || siteUrl || window.location.origin; const link = `${publicSiteUrl.replace(/\/+$/, "")}/apply?ref=${encodeURIComponent(code)}`; try { await navigator.clipboard.writeText(link); setNotice("Referral link copied."); } catch { setNotice(link); } };
   return <section className="space-y-5 p-4 sm:p-6 lg:p-8"><div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-slate-600">Create trackable application links. Applicants using a link are assigned to your account automatically.</p><button disabled={busy} onClick={create} className={btn}>{busy ? "Creating…" : "Generate referral link"}</button></div><AdminToast>{notice}</AdminToast><AdminToast tone="error">{error}</AdminToast><div className="overflow-x-auto rounded-2xl border border-line bg-white"><table className="w-full min-w-[660px] text-left text-sm"><thead className="bg-soft text-xs uppercase text-muted"><tr><th className="p-3">Code</th><th className="p-3">Owner</th><th className="p-3">Applications</th><th className="p-3">Status</th><th className="p-3">Actions</th></tr></thead><tbody>{data?.data?.map((item) => <tr key={item.id} className="border-t border-line"><td className="p-3 font-bold">{item.code}</td><td className="p-3">{item.admin?.name || "Deleted admin"}</td><td className="p-3">{item.applications_count}</td><td className="p-3">{item.is_active ? "Active" : "Disabled"}</td><td className="space-x-3 p-3"><button onClick={() => copy(item.code)} className="font-semibold text-brand">Copy link</button><button onClick={() => toggle(item)} className="font-semibold text-brand">{item.is_active ? "Disable" : "Activate"}</button></td></tr>)}{data && !data.data.length && <tr><td colSpan="5" className="p-8 text-center text-muted">No referral codes yet.</td></tr>}</tbody></table></div></section>;
 }
 
