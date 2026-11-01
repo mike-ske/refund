@@ -9,7 +9,7 @@ return [
     'phone' => env('PROGRAM_PHONE'),
     'hours' => env('PROGRAM_HOURS', 'Mon – Fri, 8 AM – 6 PM'),
     'chat_url' => env('PROGRAM_CHAT_URL'),
-    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5173'),
+    'frontend_url' => env('PROGRAM_FRONTEND_URL', 'http://localhost:5173'),
     'review_time' => env('PROGRAM_REVIEW_TIME', '7–10 business days'),
     'social' => [
         'facebook' => env('PROGRAM_FACEBOOK_URL'),

@@ -62,16 +62,35 @@ php artisan route:cache
 
 Configure your provider's SMTP credentials in `.env` before relying on application and status emails. The production template uses SMTP over TLS on port 465; change the scheme and port if your mail provider specifies different settings.
 
-## 4. Build and upload both frontends
+## 4. Deploy both frontends to Vercel
 
-The production API URL is set in [frontend/.env.production](frontend/.env.production). From `frontend`, run:
+The production API URL is set in [frontend/.env.production](frontend/.env.production). [frontend/vercel.json](frontend/vercel.json) rewrites direct page requests to the SPA entry point, as required for React Router deep links on Vercel. Set the Vercel project's **Root Directory** to `frontend`, **Build Command** to `npm run build`, and **Output Directory** to `dist`, then redeploy. Vercel's Vite guide documents this `index.html` rewrite for SPA deep links. [Vercel Vite deployment guide](https://vercel.com/docs/frameworks/frontend/vite)
+
+If building locally instead, run from `frontend`:
 
 ```sh
 npm ci
 npm run build
 ```
 
-Upload the **contents** of `frontend/dist` to the document root for both `allocationrefundprogram.com` and `app.allocationrefundprogram.com`. Use the same build for each host; React routes the public site and `/admin/*` portal. The included `.htaccess` supports page refreshes on Apache/cPanel. Add the misspelled site domain as an alias to the main site's document root if it should serve the same pages.
+If you host the static site outside Vercel, upload the **contents** of `frontend/dist` to both the main site's and `app` subdomain's document roots. The included `.htaccess` supports Apache page refreshes. Add both `www` names as aliases to their matching domains, and add the misspelled site domain as an alias to the main site if it should serve the same pages.
+
+## Live-site corrections
+
+The production hosts were checked on 2026-11-01. `api.allocationrefundprogram.com` currently presents a self-signed certificate, and its API currently returns `Access-Control-Allow-Origin: http://localhost:5173` even for a production website request. The website responds from Vercel at `/`, but Vercel returns 404 for `/admin/login` and `/how-it-works`.
+
+On the API hosting account:
+
+1. Issue/install a publicly trusted SSL certificate for `api.allocationrefundprogram.com` (cPanel **SSL/TLS Status** → **Run AutoSSL**, or the equivalent at your host). Replace the self-signed certificate on the API virtual host. Keep HTTPS enabled.
+2. In the Laravel project root `.env`, set `FRONTEND_URL` to the comma-separated origins from `.env.production.example`, including `https://www.allocationrefundprogram.com` and `https://app.allocationrefundprogram.com`. Set `PROGRAM_FRONTEND_URL=https://allocationrefundprogram.com`.
+3. Clear and rebuild the cached Laravel configuration from the backend project directory:
+
+   ```sh
+   php artisan config:clear
+   php artisan config:cache
+   ```
+
+Afterward, `curl -I https://api.allocationrefundprogram.com/api/program` should succeed without `-k`, and a request with `Origin: https://www.allocationrefundprogram.com` should receive that same origin in `Access-Control-Allow-Origin`.
 
 ## Local development
 
