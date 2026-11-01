@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@theme {
+  --color-brand: #1260c4; --color-brand-dark: #0b2a55; --color-soft: #eef5fc; --color-line: #dbe5ef; --color-muted: #64748b; --color-ink: #172b49;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { min-width: 320px; margin: 0; background: #fff; font-family: var(--font-sans); color: var(--color-ink); -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 2px; }
+.auth-slide-image { animation: auth-photo-in 900ms ease both; }
+.auth-slide-copy { animation: auth-copy-in 650ms ease both; }
+.mobile-menu { transform-origin: top center; animation: menu-drop 180ms ease-out both; }
+@keyframes auth-photo-in { from { opacity: .45; transform: scale(1.045); } to { opacity: 1; transform: scale(1); } }
+@keyframes auth-copy-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes menu-drop { from { opacity: 0; transform: translateY(-8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
