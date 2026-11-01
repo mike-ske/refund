@@ -32,7 +32,7 @@ export function Timeline({ events }) {
   return (
     <ol className="mt-4 space-y-5 border-l-2 border-line pl-5">{events.map((e) => (
       <li key={e.id} className="relative"><span className="absolute -left-[27px] top-1 h-3 w-3 rounded-full bg-brand" />
-        <p className="font-semibold"><Badge s={e.status} /> <span className="text-sm font-normal text-muted">· {e.author_role === "user" ? "Your message" : e.author_role === "admin" ? "Program staff" : "Update"} · {fdate(e.created_at, true)}</span></p>{e.message && <p className="mt-1 whitespace-pre-wrap text-sm text-slate-600">{e.message}</p>}</li>))}</ol>
+        <p className="font-semibold"><Badge s={e.status} /> <span className="text-sm font-normal text-muted">· {e.author_role === "user" ? "Your message" : ["admin", "super_admin"].includes(e.author_role) ? "Program staff" : "Update"} · {fdate(e.created_at, true)}</span></p>{e.message && <p className="mt-1 whitespace-pre-wrap text-sm text-slate-600">{e.message}</p>}</li>))}</ol>
   );
 }
 
