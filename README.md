@@ -1,7 +1,7 @@
 # Allocation Refund Program
 
     refund/
-      backend/    Laravel API (Sanctum tokens, MySQL, mail)
+    backend/    Laravel API (Sanctum tokens, MySQL, mail)
       frontend/   React + Vite + Tailwind website (applicants + staff)
       setup.sh    one-time setup      dev.sh   run both locally
 
@@ -48,4 +48,8 @@ The staff portal uses one responsive admin layout across Dashboard, Applications
 5. Run the frontend and API with `../dev.sh`, or separately with `php artisan serve` and `npm run dev`.
 
 The Users menu manages applicant accounts and includes a 15-second quiet refresh. Deleting an applicant with linked applications requires either suspending the account or confirming anonymization. Email templates support `{{name}}`, `{{reference}}`, `{{status}}`, and `{{message}}`. Every admin change is recorded in the activity log.
+
+## Production deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for cPanel/Apache setup, production MySQL and mail configuration, the API and frontend hostnames, database import steps, and local development instructions.
 # refund
