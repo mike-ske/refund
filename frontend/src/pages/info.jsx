@@ -19,12 +19,42 @@ function ImageCards({ items }) {
 }
 
 export function About() {
-  const { program } = useAuth();
-  return <><PageHero eyebrow="Program information" title={`About ${program.name}`} intro="Understand who operates this service, what it is for, and where to verify the official program rules before sharing information." image="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85" /><ImageCards items={[
-    { title: "Confirm the program operator", text: "Check the organization's name and contact details using a source you already trust.", image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=80", alt: "People discussing a program request" },
-    { title: "Understand the official rules", text: "Eligibility and outcomes depend on the terms published by the program administrator.", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80", alt: "Staff reviewing program information" },
-    { title: "Protect your information", text: "Never share passwords, PINs, card security details, or one-time codes to claim a refund.", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80", alt: "Customer receiving help with a service" },
-  ]} /><Section title="Program overview"><p>This portal provides general information and a way to submit an application for review. The program operator must publish its verified eligibility rules, funding source, and terms before accepting live applications.</p><p>Submitting a request does not establish eligibility or guarantee a refund. The program team reviews each request against the official rules and shares next steps through the application status page.</p></Section><Section title="Verify before you apply"><p>Confirm the operator and its contact details using a source you already trust. Do not pay an upfront fee or share passwords, PINs, payment card details, or one-time security codes to claim a refund.</p><p>If you cannot verify the program, wait to submit personal information and contact the organization through its independently verified channel.</p></Section><div className="mx-auto max-w-4xl px-5 pb-12"><Link className={btn} to="/how-it-works">See how the process works</Link></div></>;
+  const commitments = [
+    ["Transparency", "Make application steps, requirements and relevant program terms easier to understand."],
+    ["Professional review", "Review submissions in line with the program requirements and eligibility criteria published by its operator."],
+    ["Clear communication", "Provide relevant updates about review outcomes and any additional information requested."],
+    ["Applicant support", "Offer guidance to help applicants understand each stage of the process."],
+    ["Information security", "Handle information according to the organisation’s applicable privacy policy and safeguards."],
+  ];
+  const steps = [
+    ["Application submission", "Applicants complete the online form with the personal and contact information it requests."],
+    ["Application review", "Submissions are reviewed against the applicable program requirements and eligibility criteria."],
+    ["Application updates", "Applicants can check relevant updates on the application status page and review any request for clarification or additional documentation."],
+    ["Review outcome", "When a review is complete, applicants are notified of the outcome and any applicable next steps."],
+  ];
+
+  return <>
+    <PageHero eyebrow="About the program" title="About the Allocation Refund Program" intro="A clear, organised and transparent application experience." image="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85" />
+    <Section title="Welcome">
+      <p>Welcome to the Allocation Refund Program. This portal is designed to provide applicants with a structured, accessible and straightforward application experience.</p>
+      <p>Its aim is to make the application process easier to understand, explain the information requested, and help applicants follow relevant updates throughout review. Eligibility and outcomes depend on the program requirements published by its operator; submitting an application does not guarantee approval or payment.</p>
+    </Section>
+    <Section title="Our Commitment to Applicants">
+      <p>Clear communication and an organised application process help applicants understand what to expect. Submissions are reviewed according to the applicable program requirements and eligibility criteria.</p>
+      <ul className="list-disc space-y-3 pl-6">{commitments.map(([title, body]) => <li key={title}><strong className="text-brand-dark">{title}:</strong> {body}</li>)}</ul>
+    </Section>
+    <section className="bg-soft/60 py-12"><div className="mx-auto max-w-5xl px-5"><h2 className="text-2xl font-extrabold text-brand-dark">Understanding the Application Process</h2><p className="mt-3 leading-relaxed text-slate-600">The process is organised to explain what applicants can expect at each stage.</p><ol className="mt-6 grid gap-5 sm:grid-cols-2">{steps.map(([title, body], index) => <li key={title} className="rounded-2xl border border-line bg-white p-6 shadow-sm"><span className="grid h-10 w-10 place-items-center rounded-full bg-soft font-bold text-brand">{index + 1}</span><h3 className="mt-4 font-bold text-brand-dark">{title}</h3><p className="mt-2 leading-relaxed text-slate-600">{body}</p></li>)}</ol></div></section>
+    <Section title="Our Approach to Applicant Support">
+      <p>Thank you for your interest in the program and for taking the time to submit an application.</p>
+      <p>Applications are considered in accordance with the published program requirements. We aim to provide relevant updates and guidance so applicants can understand what to expect throughout the process.</p>
+      <p>We appreciate your patience, cooperation and interest in the program.</p>
+    </Section>
+    <Section title="Your Information Matters">
+      <p>Personal information submitted through this portal should be handled in accordance with the organisation’s applicable privacy policy. Review that policy and confirm the program operator before providing personal information.</p>
+      <p>For your security, never share account passwords, banking PINs, card security codes or one-time authentication codes with anyone.</p>
+    </Section>
+    <section className="mx-auto max-w-4xl px-5 pb-12 text-center"><h2 className="text-2xl font-extrabold text-brand-dark">Get Started</h2><p className="mx-auto mt-3 max-w-2xl leading-relaxed text-slate-600">Review the information requested on the application page before deciding whether to submit an application.</p><p className="mt-4 font-semibold text-brand-dark">A well-organised process begins with clear information and effective communication.</p><div className="mt-6 flex flex-wrap justify-center gap-3"><Link to="/apply" className={`${btn} inline-flex`}>Apply Now</Link><Link to="/how-it-works" className="inline-flex items-center rounded-full border border-brand/25 bg-white px-6 py-3.5 font-semibold text-brand hover:bg-soft">Learn More</Link></div></section>
+  </>;
 }
 
 export function HowItWorks() {
